@@ -1,0 +1,138 @@
+{
+  "device_name": "PixelRise",
+  "clock_ip": "192.168.1.50",
+  "lat": null,
+  "lon": null,
+  "interval_minutes": 5,
+  "step_down_minutes": 30,
+  "manual_pause_hours": 3,
+  "dark_sun_alt": -12,
+  "night_sun_alt": -6,
+  "aurora_alarm": false,
+  "thresholds": {
+    "watch_kp": 4.0,
+    "storm_kp": 6.33,
+    "watch_view_prob": 5,
+    "storm_view_prob": 20,
+    "watch_bz": -10
+  },
+  "baseline_playlist_b64": "VQAAAAAAAAA8AAAfAAAAAAAAADwAAFgAAAAAAAAAPAAACwAAAAAAAAA8AABZAAAAAAAAADwAAAwAAAAAAAAAPAgAVwAAAAAAAAA8AAANAQEBAQEFAB4AMjYAAAAAAAAAPAAA",
+  "baseline_backlight": "day",
+  "alarm1_saved_b64": "Bx5/AQcAHgABAgEJAg==",
+  "moods": {
+    "night": {
+      "backlight": "night",
+      "playlist": [
+        {
+          "anim": 11,
+          "seconds": 60,
+          "color": "blue"
+        },
+        {
+          "anim": 88,
+          "seconds": 30
+        }
+      ]
+    },
+    "aurora_watch": {
+      "backlight": "day",
+      "playlist": [
+        {
+          "anim": 11,
+          "seconds": 30,
+          "color": "orange"
+        },
+        {
+          "anim": 73,
+          "seconds": 30
+        },
+        {
+          "anim": 72,
+          "seconds": 20
+        }
+      ]
+    },
+    "aurora_storm": {
+      "backlight": "day",
+      "playlist": [
+        {
+          "anim": 11,
+          "seconds": 20,
+          "color": "red"
+        },
+        {
+          "anim": 73,
+          "seconds": 30
+        },
+        {
+          "anim": 71,
+          "seconds": 30
+        },
+        {
+          "anim": 89,
+          "seconds": 20
+        },
+        {
+          "anim": 74,
+          "seconds": 20
+        }
+      ]
+    },
+    "claude": {
+      "backlight": "day",
+      "playlist": [
+        {
+          "anim": 11,
+          "seconds": 20,
+          "color": "orange"
+        },
+        {
+          "anim": 76,
+          "seconds": 20
+        },
+        {
+          "anim": 89,
+          "seconds": 20
+        },
+        {
+          "anim": 71,
+          "seconds": 20
+        },
+        {
+          "anim": 74,
+          "seconds": 20
+        }
+      ]
+    }
+  },
+  "_animation_ids": {
+    "11": "clock big",
+    "12": "clock small",
+    "13": "date",
+    "21": "weather icon + temp",
+    "31": "indoor temp + humidity",
+    "51": "alarm clock",
+    "52": "ghost",
+    "53": "whale",
+    "54": "city skyline",
+    "71": "galaxy spiral",
+    "72": "comet line",
+    "73": "wave (aurora-like)",
+    "74": "colour swirl",
+    "75": "blob map",
+    "76": "sparkle lines",
+    "85": "fire bars",
+    "87": "triangle",
+    "88": "rain",
+    "89": "particles"
+  },
+  "_scenes_note": "auto moods: day/night/aurora_watch/aurora_storm; 'claude' plays while any Claude Code session is working (hooks), at the current mood's brightness; aurora moods win",
+  "claude": {
+    "enabled": true,
+    "busy_dir": "~/Library/Application Support/skymood/claude-busy",
+    "linger_seconds": 60,
+    "stale_hours": 2,
+    "at_night": true
+  },
+  "_setup": "copy to config.local.json; set lat/lon (decimal degrees) and clock_ip; baseline_playlist_b64 is replaced by whatever you set in the app during the day"
+}

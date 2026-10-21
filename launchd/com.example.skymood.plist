@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.example.skymood</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/ABSOLUTE/PATH/TO/pixelrise-skymood/.venv/bin/python</string>
+    <string>-I</string>
+    <string>/ABSOLUTE/PATH/TO/pixelrise-skymood/skymood.py</string>
+    <string>run</string>
+  </array>
+  <!-- keep the working directory and logs on the internal disk: launchd exits with 78 (EX_CONFIG)
+       if they live on an external volume -->
+  <key>WorkingDirectory</key><string>/Users/YOU</string>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>60</integer>
+  <key>StandardOutPath</key><string>/Users/YOU/Library/Logs/skymood.out.log</string>
+  <key>StandardErrorPath</key><string>/Users/YOU/Library/Logs/skymood.err.log</string>
+</dict>
+</plist>
