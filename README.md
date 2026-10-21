@@ -8,6 +8,10 @@ Local, cloud-free control of the **Dekala PixelRise** pixel-art alarm clock from
   "thinking" scene. It goes back to the sky mood a minute after the last session finishes.
 - Everything runs over the home Wi-Fi with Tuya's local protocol. No cloud round-trip, and no vendor app needed once it's set up.
 
+<p><img src="docs/aurora-mode.png" width="48%" alt="aurora mode (simulated display)"> <img src="docs/claude-mode.png" width="48%" alt="Claude mode (simulated display)"></p>
+
+<sub>Simulated displays.</sub>
+
 Built in one afternoon (2026-10-21) with [Claude Code](https://claude.com/claude-code), from "what's inside this clock?" to
 a running service. Unofficial: not affiliated with Dekala or Tuya.
 
