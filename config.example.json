@@ -54,19 +54,28 @@
         },
         {
           "anim": 75,
-          "seconds": 20
+          "seconds": 20,
+          "color": "green"
         },
         {
           "anim": 88,
-          "seconds": 15
+          "seconds": 15,
+          "color": "green"
+        },
+        {
+          "anim": 71,
+          "seconds": 15,
+          "color": "green"
         },
         {
           "anim": 73,
-          "seconds": 15
+          "seconds": 15,
+          "color": "green"
         },
         {
           "anim": 90,
-          "seconds": 15
+          "seconds": 15,
+          "color": "purple"
         }
       ]
     },
@@ -80,15 +89,18 @@
         },
         {
           "anim": 75,
-          "seconds": 15
-        },
-        {
-          "anim": 90,
-          "seconds": 12
+          "seconds": 15,
+          "color": "green"
         },
         {
           "anim": 88,
-          "seconds": 10
+          "seconds": 10,
+          "color": "purple"
+        },
+        {
+          "anim": 71,
+          "seconds": 12,
+          "color": "green"
         },
         {
           "anim": 11,
@@ -96,16 +108,24 @@
           "color": "kp"
         },
         {
+          "anim": 90,
+          "seconds": 12,
+          "color": "purple"
+        },
+        {
           "anim": 73,
-          "seconds": 12
+          "seconds": 12,
+          "color": "green"
+        },
+        {
+          "anim": 88,
+          "seconds": 10,
+          "color": "green"
         },
         {
           "anim": 83,
-          "seconds": 10
-        },
-        {
-          "anim": 86,
-          "seconds": 10
+          "seconds": 10,
+          "color": "green"
         }
       ]
     },
@@ -221,5 +241,5 @@
     "07:00"
   ],
   "_night_note": "night_hours: fixed local-time window for the night mood and forced dim backlight (aurora/Claude scenes stay dim too); remove it to fall back to dusk/dawn (night_sun_alt)",
-  "_aurora_note": "aurora scenes: blob map (curtain band), rain (rays), wave, glowing ring (auroral oval), sine waves, fireworks in a storm; \"color\": \"kp\" tints the clock by live Kp: green < 5, yellow 5 (G1), orange 6 (G2), red 7 (G3), purple 8+ (G4-5); kp = max(1-min estimate, current 3-h block); storm = Kp >= storm_kp or OVATION >= storm_view_prob within storm_reach_deg"
+  "_aurora_note": "aurora scenes (tinted, since the colour byte tints animations): blob map green (curtain band), rain green/purple (rays), galaxy green (spiral aurora), wave green, glowing ring purple (oval), sine waves green; \"color\": \"kp\" tints the clock by live Kp: green < 5, yellow 5 (G1), orange 6 (G2), red 7 (G3), purple 8+ (G4-5)"
 }
