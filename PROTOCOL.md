@@ -45,8 +45,8 @@ Two layouts appear, and writing either back works:
 - **Clock faces 11 and 12:** `id 00 00 00 00 00 00 00 secs colour 00`
 - **Everything else:** `id 01 01 01 01 01 05 00 secs colour 32`
 
-Colour is a swatch index: 0 white, 1 red (both verified). 2–7 are inferred from the app's swatch order
-(orange, yellow, green, cyan, blue, purple). 8 appears on an item whose colour was set to "gradient".
+Colour is a swatch index: 0 white, 1 red, 2 orange (verified). 3–7 are inferred from the app's swatch order
+(yellow, green, cyan, blue, purple). 8 appears on an item whose colour was set to "gradient".
 
 Writing DP 121 replaces the playlist; the clock answers with a DP 120 report giving the new count.
 

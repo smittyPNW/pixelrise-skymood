@@ -132,7 +132,7 @@ Settings: `config.local.json` → `claude` (`scenes`, `time_check`, `min_dwell_s
 
 - Moving the clock from the Dekala app to Smart Life re-pairs it. It's reversible: remove it there and add it back in Dekala.
 - Writes are limited to settings the official app also changes (playlist, brightness, alarm). Nothing is flashed.
-- Only the white and red colour swatches are verified; the other six are inferred from the app's swatch order.
+- White, red and orange colour swatches are verified; the other five are inferred from the app's swatch order.
 - Use at your own risk.
 
 ## Credits
