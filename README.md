@@ -102,17 +102,20 @@ The daemon reads that folder every few seconds and picks a scene from the busies
 
 | Activity | Built-in animations |
 |---|---|
-| thinking / planning | galaxy spiral, glowing ring, sine waves, ghost |
-| reading / searching | comet, rain, plaid grid |
-| writing code (Edit/Write) | sparkle lines, checker mosaic, bars, particles |
-| running commands (Bash) | fire bars, flames, blob map |
-| delegating (agents, workflows) | triangle, sunburst, colour swirl |
-| waiting for your OK | alarm clock |
-| just finished (60 s) | fireworks, whale |
+| thinking / planning | ghost, galaxy spiral, glowing ring |
+| reading / searching | ghost, comet, rain |
+| writing code (Edit/Write) | ghost, sparkle lines, particles |
+| running commands (Bash) | ghost, fire bars, flames |
+| delegating (agents, workflows) | ghost, whale, sunburst |
+| waiting for your OK | alarm clock, ghost |
+| just finished (60 s) | whale, fireworks |
+
+The ghost is the clock's only character, so it stands in for Claude at the start of every working scene.
+`item_colors` in the config can tint items, e.g. `{"52": "orange"}`.
 
 Every cycle ends with the orange clock for 10 s as a time check.
 
-**How busy:** with 2 sessions working the marble swirl joins in, and with 3 or more the diamond pattern does too.
+**How busy:** with 2 sessions working the marble swirl joins in, and with 3 or more the colour swirl does too.
 Item length drops from 20 s to 15 s to 10 s as more sessions work.
 
 **Pacing:** a scene holds at least 45 s, except when Claude needs you, finishes, or goes idle; those switch at once.

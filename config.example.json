@@ -164,45 +164,44 @@
     "at_night": true,
     "scenes": {
       "think": [
+        52,
         71,
-        90,
-        83,
-        52
+        90
       ],
       "read": [
+        52,
         72,
-        88,
-        82
+        88
       ],
       "write": [
+        52,
         76,
-        80,
-        79,
         89
       ],
       "run": [
+        52,
         85,
-        78,
-        75
+        78
       ],
       "delegate": [
-        87,
-        84,
-        74
+        52,
+        53,
+        84
       ],
       "wait": [
-        51
+        51,
+        52
       ],
       "done": [
-        86,
-        53
+        53,
+        86
       ],
       "busy2": [
         81
       ],
       "busy3": [
         81,
-        77
+        74
       ]
     },
     "time_check": {
@@ -211,7 +210,8 @@
       "color": "orange"
     },
     "min_dwell_seconds": 45,
-    "_scenes_note": "activity -> built-in animation ids: think=galaxy, glowing ring, sine waves, ghost; read=comet, rain, plaid grid; write=sparkle lines, checker mosaic, bars, particles; run=fire bars, flames, blob map; delegate=triangle, sunburst, colour swirl; wait=alarm clock; done=fireworks, whale; busy2 adds marble swirl, busy3 also diamond pattern; items 20/15/10 s by sessions busy; time_check = orange clock once per cycle"
+    "_scenes_note": "the ghost (52) is Claude's stand-in and opens every working scene: think=ghost, galaxy, glowing ring; read=ghost, comet, rain; write=ghost, sparkle lines, particles; run=ghost, fire bars, flames; delegate=ghost, whale, sunburst; wait=alarm clock, ghost; done=whale, fireworks; busy2 adds marble swirl, busy3 also colour swirl; no blocky patterns (77/79/80/82); item_colors can tint items, e.g. {\"52\": \"orange\"}",
+    "item_colors": {}
   },
   "_setup": "copy to config.local.json; set lat/lon (decimal degrees) and clock_ip; baseline_playlist_b64 is replaced by whatever you set in the app during the day",
   "night_hours": [

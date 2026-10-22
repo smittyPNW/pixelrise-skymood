@@ -134,7 +134,8 @@ def claude_scene(cfg, kinds):
         if kind != "wait":
             anims += sc.get(f"busy{level}", []) if level > 1 else []
         key, secs = (kind, level), {1: 20, 2: 15, 3: 10}[level]
-    items = [{"anim": a, "seconds": secs} for a in dict.fromkeys(anims)]
+    tint = {int(k): v for k, v in (c.get("item_colors") or {}).items()}  # e.g. {"52": "orange"}
+    items = [dict({"anim": a, "seconds": secs}, **({"color": tint[a]} if a in tint else {})) for a in dict.fromkeys(anims)]
     tc = c.get("time_check")
     if tc:
         items.append(dict(tc))
