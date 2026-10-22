@@ -209,21 +209,30 @@ def read_sky(cfg, now=None):
     try:
         dark = [now + timedelta(minutes=15 * i) for i in range(4 * 18)]
         dark = [t for t in dark if sun_altitude(lat, lon, t) < cfg["dark_sun_alt"]]
-        fc = [r for r in fetch("products/noaa-planetary-k-index-forecast.json") if r.get("observed") in ("predicted", "estimated")]
+        allrows = fetch("products/noaa-planetary-k-index-forecast.json")
+        fc = [r for r in allrows if r.get("observed") in ("predicted", "estimated")]
         tonight = [r["kp"] for r in fc if any(utc(r["time_tag"]) <= t < utc(r["time_tag"]) + timedelta(hours=3) for t in dark)]
         sky["kp_tonight_max"] = max(tonight) if tonight else None
+        # the official 3-hour Kp for the block we're in (what "it hit Kp 5" refers to)
+        block = [r["kp"] for r in allrows if r.get("observed") in ("observed", "estimated")
+                 and utc(r["time_tag"]) <= now < utc(r["time_tag"]) + timedelta(hours=3)]
+        sky["kp_block"] = block[-1] if block else None
     except Exception as e:
-        sky["kp_tonight_max"] = None
+        sky["kp_tonight_max"] = sky["kp_block"] = None
         sky["forecast_error"] = str(e)
+    sky["kp"] = max(v for v in (sky.get("kp_now"), sky.get("kp_block"), 0) if v is not None)
     try:
         sky["bz"] = fetch("products/summary/solar-wind-mag-field.json")[0].get("bz_gsm")
     except Exception as e:
         sky["bz"] = None
         sky["bz_error"] = str(e)
     try:
-        sky["ovation_view"] = ovation_view_prob(fetch("json/ovation_aurora_latest.json")["coordinates"], lat, lon)
+        grid = fetch("json/ovation_aurora_latest.json")["coordinates"]
+        th = cfg["thresholds"]
+        sky["ovation_view"] = ovation_view_prob(grid, lat, lon, th.get("watch_reach_deg", 10))
+        sky["ovation_near"] = ovation_view_prob(grid, lat, lon, th.get("storm_reach_deg", 6))
     except Exception as e:
-        sky["ovation_view"] = None
+        sky["ovation_view"] = sky["ovation_near"] = None
         sky["ovation_error"] = str(e)
     return sky
 
@@ -231,11 +240,12 @@ def read_sky(cfg, now=None):
 def decide(sky, cfg, now=None):
     t = cfg["thresholds"]
     dark = sky["sun_alt"] < cfg["dark_sun_alt"]
-    kp = sky.get("kp_now") or 0
+    kp = sky.get("kp", sky.get("kp_now")) or 0
     view = sky.get("ovation_view") or 0
+    near = sky.get("ovation_near", view) or 0
     bz = sky.get("bz")
     tonight = sky.get("kp_tonight_max") or 0
-    if dark and (kp >= t["storm_kp"] or view >= t["storm_view_prob"]):
+    if dark and (kp >= t["storm_kp"] or near >= t["storm_view_prob"]):
         return "aurora_storm"
     if dark and (kp >= t["watch_kp"] or view >= t["watch_view_prob"] or tonight >= t["storm_kp"]
                  or (bz is not None and bz <= t["watch_bz"])):
@@ -278,6 +288,14 @@ def seconds_to_night_boundary(cfg, now=None):
 
 
 # ----------------------------------------------------------------- clock
+def kp_color(kp):
+    """Clock colour for the live Kp, following NOAA's G-scale: G1 starts at Kp 5."""
+    for limit, name in ((5, "green"), (6, "yellow"), (7, "orange"), (8, "red")):
+        if kp < limit:
+            return name
+    return "purple"
+
+
 def encode_item(it):
     """One 11-byte DP 121 entry, laid out exactly as the app writes them."""
     anim, dur = int(it["anim"]), int(it.get("seconds", 30))
@@ -339,7 +357,9 @@ class Controller:
         if mood == "day":
             return self.state["baseline_playlist_b64"], self.state["baseline_backlight"]
         m = self.cfg["moods"][mood]
-        return encode_playlist(m["playlist"]), m["backlight"]
+        kp_col = kp_color(self.state.get("kp", 0))  # "color": "kp" = clock tinted by the live Kp
+        items = [dict(it, color=kp_col) if it.get("color") == "kp" else it for it in m["playlist"]]
+        return encode_playlist(items), m["backlight"]
 
     def target(self):
         """What the clock should show: aurora moods win, then the Claude scene
@@ -401,6 +421,7 @@ class Controller:
 
     def evaluate(self):
         sky = read_sky(self.cfg)
+        self.state["kp"] = sky.get("kp", 0)
         mood = decide(sky, self.cfg)
         cur = self.state.get("mood")
         rank = ["day", "night", "aurora_watch", "aurora_storm"]

@@ -32,9 +32,13 @@ Watching the device while driving its app showed:
 |---|---|---|
 | day | sun above −6° | your own playlist (anything you set in the app during the day becomes the day playlist) |
 | night | 8 PM–7 AM (`night_hours`; without it, dusk to dawn), quiet sky | blue clock (60 s) + rain, glowing ring, sine waves, dimmed |
-| aurora_watch | dark (sun < −12°) and Kp ≥ 4, or Bz ≤ −10 nT, or OVATION ≥ 5 % within 10° poleward, or tonight's forecast ≥ 6⅓ | orange clock + wave + comet |
-| aurora_storm | dark and Kp ≥ 6⅓, or OVATION ≥ 20 % | red clock + wave + galaxy + particles + swirl |
+| aurora_watch | dark (sun < −12°) and Kp ≥ 4, or Bz ≤ −10 nT, or OVATION ≥ 5 % within 10° poleward, or tonight's forecast ≥ 6⅓ | **Kp-coloured clock** + blob map (curtain band), rain (rays), wave, glowing ring (auroral oval) |
+| aurora_storm | dark and Kp ≥ 6⅓, or OVATION ≥ 25 % within 6° poleward | Kp-coloured clock twice + blob map, glowing ring, rain, wave, sine waves, fireworks, faster |
 | claude | any Claude Code session busy | an activity scene (thinking / reading / writing / running / delegating / waiting / done), busier when more sessions work, orange clock as a 10 s time check; at the current mood's brightness; aurora moods win |
+
+**Kp colour:** the clock shows the live Kp as a colour, following NOAA's G-scale:
+green below 5, yellow 5 (G1), orange 6 (G2), red 7 (G3), purple 8+ (G4–5).
+Kp is the higher of the 1-minute estimate and the official 3-hour value for the current block.
 
 During `night_hours` the backlight is always dim, including for the aurora and Claude scenes.
 

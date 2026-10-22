@@ -13,8 +13,10 @@
     "watch_kp": 4.0,
     "storm_kp": 6.33,
     "watch_view_prob": 5,
-    "storm_view_prob": 20,
-    "watch_bz": -10
+    "storm_view_prob": 25,
+    "watch_bz": -10,
+    "watch_reach_deg": 10,
+    "storm_reach_deg": 6
   },
   "baseline_playlist_b64": "VQAAAAAAAAA8AAAfAAAAAAAAADwAAFgAAAAAAAAAPAAACwAAAAAAAAA8AABZAAAAAAAAADwAAAwAAAAAAAAAPAgAVwAAAAAAAAA8AAANAQEBAQEFAB4AMjYAAAAAAAAAPAAA",
   "baseline_backlight": "day",
@@ -47,16 +49,24 @@
       "playlist": [
         {
           "anim": 11,
-          "seconds": 30,
-          "color": "orange"
+          "seconds": 15,
+          "color": "kp"
+        },
+        {
+          "anim": 75,
+          "seconds": 20
+        },
+        {
+          "anim": 88,
+          "seconds": 15
         },
         {
           "anim": 73,
-          "seconds": 30
+          "seconds": 15
         },
         {
-          "anim": 72,
-          "seconds": 20
+          "anim": 90,
+          "seconds": 15
         }
       ]
     },
@@ -65,24 +75,37 @@
       "playlist": [
         {
           "anim": 11,
-          "seconds": 20,
-          "color": "red"
+          "seconds": 10,
+          "color": "kp"
+        },
+        {
+          "anim": 75,
+          "seconds": 15
+        },
+        {
+          "anim": 90,
+          "seconds": 12
+        },
+        {
+          "anim": 88,
+          "seconds": 10
+        },
+        {
+          "anim": 11,
+          "seconds": 10,
+          "color": "kp"
         },
         {
           "anim": 73,
-          "seconds": 30
+          "seconds": 12
         },
         {
-          "anim": 71,
-          "seconds": 30
+          "anim": 83,
+          "seconds": 10
         },
         {
-          "anim": 89,
-          "seconds": 20
-        },
-        {
-          "anim": 74,
-          "seconds": 20
+          "anim": 86,
+          "seconds": 10
         }
       ]
     },
@@ -195,5 +218,6 @@
     "20:00",
     "07:00"
   ],
-  "_night_note": "night_hours: fixed local-time window for the night mood and forced dim backlight (aurora/Claude scenes stay dim too); remove it to fall back to dusk/dawn (night_sun_alt)"
+  "_night_note": "night_hours: fixed local-time window for the night mood and forced dim backlight (aurora/Claude scenes stay dim too); remove it to fall back to dusk/dawn (night_sun_alt)",
+  "_aurora_note": "aurora scenes: blob map (curtain band), rain (rays), wave, glowing ring (auroral oval), sine waves, fireworks in a storm; \"color\": \"kp\" tints the clock by live Kp: green < 5, yellow 5 (G1), orange 6 (G2), red 7 (G3), purple 8+ (G4-5); kp = max(1-min estimate, current 3-h block); storm = Kp >= storm_kp or OVATION >= storm_view_prob within storm_reach_deg"
 }
