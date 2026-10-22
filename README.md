@@ -110,8 +110,8 @@ The daemon reads that folder every few seconds and picks a scene from the busies
 | waiting for your OK | alarm clock, ghost |
 | just finished (60 s) | whale, fireworks |
 
-The ghost is the clock's only character, so it stands in for Claude at the start of every working scene.
-`item_colors` in the config can tint items, e.g. `{"52": "orange"}`.
+The ghost is the clock's only character, so it stands in for Claude at the start of every working scene, tinted
+Claude-orange (`item_colors: {"52": "orange"}`). The colour byte tints animations as well as clock faces.
 
 Every cycle ends with the orange clock for 10 s as a time check.
 

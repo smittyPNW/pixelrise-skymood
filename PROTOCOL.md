@@ -47,6 +47,8 @@ Two layouts appear, and writing either back works:
 
 Colour is a swatch index: 0 white, 1 red, 2 orange (verified). 3–7 are inferred from the app's swatch order
 (yellow, green, cyan, blue, purple). 8 appears on an item whose colour was set to "gradient".
+The colour byte also tints animations, not just clock faces: setting it to 2 on the ghost (52) and whale (53) turned
+them orange (verified on the clock 2026-10-22). The app itself only exposes colour for clock faces.
 
 Writing DP 121 replaces the playlist; the clock answers with a DP 120 report giving the new count.
 

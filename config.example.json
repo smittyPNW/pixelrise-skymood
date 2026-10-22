@@ -211,7 +211,9 @@
     },
     "min_dwell_seconds": 45,
     "_scenes_note": "the ghost (52) is Claude's stand-in and opens every working scene: think=ghost, galaxy, glowing ring; read=ghost, comet, rain; write=ghost, sparkle lines, particles; run=ghost, fire bars, flames; delegate=ghost, whale, sunburst; wait=alarm clock, ghost; done=whale, fireworks; busy2 adds marble swirl, busy3 also colour swirl; no blocky patterns (77/79/80/82); item_colors can tint items, e.g. {\"52\": \"orange\"}",
-    "item_colors": {}
+    "item_colors": {
+      "52": "orange"
+    }
   },
   "_setup": "copy to config.local.json; set lat/lon (decimal degrees) and clock_ip; baseline_playlist_b64 is replaced by whatever you set in the app during the day",
   "night_hours": [
