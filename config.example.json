@@ -30,7 +30,15 @@
         },
         {
           "anim": 88,
-          "seconds": 30
+          "seconds": 20
+        },
+        {
+          "anim": 90,
+          "seconds": 20
+        },
+        {
+          "anim": 83,
+          "seconds": 20
         }
       ]
     },
@@ -109,10 +117,20 @@
     "74": "colour swirl",
     "75": "blob map",
     "76": "sparkle lines",
+    "77": "diamond pattern",
+    "78": "flames",
+    "79": "bars",
+    "80": "checker mosaic",
+    "81": "marble swirl",
+    "82": "plaid grid",
+    "83": "sine waves",
+    "84": "sunburst",
     "85": "fire bars",
+    "86": "fireworks",
     "87": "triangle",
     "88": "rain",
-    "89": "particles"
+    "89": "particles",
+    "90": "glowing ring"
   },
   "_scenes_note": "auto moods: day/night/aurora_watch/aurora_storm; 'claude' plays while any Claude Code session is working (hooks), at the current mood's brightness; aurora moods win",
   "claude": {
@@ -124,37 +142,44 @@
     "scenes": {
       "think": [
         71,
+        90,
+        83,
         52
       ],
       "read": [
         72,
-        88
+        88,
+        82
       ],
       "write": [
         76,
+        80,
+        79,
         89
       ],
       "run": [
         85,
+        78,
         75
       ],
       "delegate": [
         87,
+        84,
         74
       ],
       "wait": [
         51
       ],
       "done": [
+        86,
         53
       ],
       "busy2": [
-        74
+        81
       ],
       "busy3": [
-        74,
-        87,
-        89
+        81,
+        77
       ]
     },
     "time_check": {
@@ -163,7 +188,7 @@
       "color": "orange"
     },
     "min_dwell_seconds": 45,
-    "_scenes_note": "activity -> built-in animation ids: think=galaxy+ghost, read=comet+rain, write=sparkle lines+particles, run=fire bars+blob map, delegate=triangle+swirl, wait=alarm clock, done=whale; busyN adds more when N sessions work at once (items also get shorter: 20/15/10 s); time_check = the orange clock once per cycle"
+    "_scenes_note": "activity -> built-in animation ids: think=galaxy, glowing ring, sine waves, ghost; read=comet, rain, plaid grid; write=sparkle lines, checker mosaic, bars, particles; run=fire bars, flames, blob map; delegate=triangle, sunburst, colour swirl; wait=alarm clock; done=fireworks, whale; busy2 adds marble swirl, busy3 also diamond pattern; items 20/15/10 s by sessions busy; time_check = orange clock once per cycle"
   },
   "_setup": "copy to config.local.json; set lat/lon (decimal degrees) and clock_ip; baseline_playlist_b64 is replaced by whatever you set in the app during the day",
   "night_hours": [

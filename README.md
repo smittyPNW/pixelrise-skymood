@@ -31,7 +31,7 @@ Watching the device while driving its app showed:
 | Mood | When (defaults, all in `config.local.json`) | Clock |
 |---|---|---|
 | day | sun above −6° | your own playlist (anything you set in the app during the day becomes the day playlist) |
-| night | 8 PM–7 AM (`night_hours`; without it, dusk to dawn), quiet sky | blue clock + rain, dimmed |
+| night | 8 PM–7 AM (`night_hours`; without it, dusk to dawn), quiet sky | blue clock (60 s) + rain, glowing ring, sine waves, dimmed |
 | aurora_watch | dark (sun < −12°) and Kp ≥ 4, or Bz ≤ −10 nT, or OVATION ≥ 5 % within 10° poleward, or tonight's forecast ≥ 6⅓ | orange clock + wave + comet |
 | aurora_storm | dark and Kp ≥ 6⅓, or OVATION ≥ 20 % | red clock + wave + galaxy + particles + swirl |
 | claude | any Claude Code session busy | an activity scene (thinking / reading / writing / running / delegating / waiting / done), busier when more sessions work, orange clock as a 10 s time check; at the current mood's brightness; aurora moods win |
@@ -98,17 +98,17 @@ The daemon reads that folder every few seconds and picks a scene from the busies
 
 | Activity | Built-in animations |
 |---|---|
-| thinking / planning | galaxy spiral + ghost |
-| reading / searching | comet + rain |
-| writing code (Edit/Write) | sparkle lines + particles |
-| running commands (Bash) | fire bars + blob map |
-| delegating (agents, workflows) | triangle + colour swirl |
+| thinking / planning | galaxy spiral, glowing ring, sine waves, ghost |
+| reading / searching | comet, rain, plaid grid |
+| writing code (Edit/Write) | sparkle lines, checker mosaic, bars, particles |
+| running commands (Bash) | fire bars, flames, blob map |
+| delegating (agents, workflows) | triangle, sunburst, colour swirl |
 | waiting for your OK | alarm clock |
-| just finished (60 s) | whale |
+| just finished (60 s) | fireworks, whale |
 
 Every cycle ends with the orange clock for 10 s as a time check.
 
-**How busy:** with 2 sessions working the colour swirl joins in, and with 3 or more the triangle and particles do too.
+**How busy:** with 2 sessions working the marble swirl joins in, and with 3 or more the diamond pattern does too.
 Item length drops from 20 s to 15 s to 10 s as more sessions work.
 
 **Pacing:** a scene holds at least 45 s, except when Claude needs you, finishes, or goes idle; those switch at once.

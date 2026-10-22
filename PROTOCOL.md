@@ -50,22 +50,22 @@ Colour is a swatch index: 0 white, 1 red (both verified). 2–7 are inferred fro
 
 Writing DP 121 replaces the playlist; the clock answers with a DP 120 report giving the new count.
 
-## Built-in animation IDs seen
+## Built-in animation IDs (all 29 in the app's library)
 
-| ID | Animation | ID | Animation |
-|---|---|---|---|
-| 11 | big clock face | 71 | galaxy spiral |
-| 12 | small clock face | 72 | comet line |
-| 13 | date | 73 | wave (aurora-like) |
-| 21 | weather icon + temperature | 74 | colour swirl |
-| 31 | indoor temperature + humidity | 75 | blob map |
-| 51 | alarm clock | 76 | sparkle lines |
-| 52 | ghost | 85 | fire bars |
-| 53 | whale | 87 | triangle |
-| 54 | city skyline | 88 | rain |
-| | | 89 | particles |
+| ID | Animation | ID | Animation | ID | Animation |
+|---|---|---|---|---|---|
+| 11 | big clock face | 71 | galaxy spiral | 81 | marble swirl |
+| 12 | small clock face | 72 | comet line | 82 | plaid grid |
+| 13 | date | 73 | wave (aurora-like) | 83 | sine waves |
+| 21 | weather icon + temperature | 74 | colour swirl | 84 | sunburst |
+| 31 | indoor temperature + humidity | 75 | blob map | 85 | fire bars |
+| 51 | alarm clock | 76 | sparkle lines | 86 | fireworks |
+| 52 | ghost | 77 | diamond pattern | 87 | triangle |
+| 53 | whale | 78 | flames | 88 | rain |
+| 54 | city skyline | 79 | bars | 89 | particles |
+| | | 80 | checker mosaic | 90 | glowing ring |
 
-About five more animations in the app's library are still unmapped.
+The app allows at most 19 items per playlist.
 
 ## DP 111: alarm 1 (13 bytes)
 
