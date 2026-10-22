@@ -4,7 +4,7 @@ Local, cloud-free control of the **Dekala PixelRise** pixel-art alarm clock from
 
 - **Sky moods.** The clock's built-in animations follow live NOAA space weather and the sun: a calm night
   scene after dusk, an aurora scene when Kp climbs, a red "storm" scene when the aurora could be overhead.
-- **Claude scene.** While any Claude Code session on the Mac is working, the clock plays an orange
+- **Claude scene.** While any Claude Code session on the Mac is working, the clock shows an orange
   "thinking" scene. It goes back to the sky mood a minute after the last session finishes.
 - Everything runs over the home Wi-Fi with Tuya's local protocol. No cloud round-trip, and no vendor app needed once it's set up.
 
@@ -34,7 +34,7 @@ Watching the device while driving its app showed:
 | night | 8 PM–7 AM (`night_hours`; without it, dusk to dawn), quiet sky | blue clock + rain, dimmed |
 | aurora_watch | dark (sun < −12°) and Kp ≥ 4, or Bz ≤ −10 nT, or OVATION ≥ 5 % within 10° poleward, or tonight's forecast ≥ 6⅓ | orange clock + wave + comet |
 | aurora_storm | dark and Kp ≥ 6⅓, or OVATION ≥ 20 % | red clock + wave + galaxy + particles + swirl |
-| claude | any Claude Code session busy (+60 s linger) | orange clock + sparkle lines, particles, galaxy, swirl (at the current mood's brightness; aurora moods win) |
+| claude | any Claude Code session busy (+60 s linger) | orange clock (40 s) + sparkle burst (10 s), so it reads at a glance (at the current mood's brightness; aurora moods win) |
 
 During `night_hours` the backlight is always dim, including for the aurora and Claude scenes.
 

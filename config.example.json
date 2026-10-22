@@ -83,24 +83,12 @@
       "playlist": [
         {
           "anim": 11,
-          "seconds": 20,
+          "seconds": 40,
           "color": "orange"
         },
         {
           "anim": 76,
-          "seconds": 20
-        },
-        {
-          "anim": 89,
-          "seconds": 20
-        },
-        {
-          "anim": 71,
-          "seconds": 20
-        },
-        {
-          "anim": 74,
-          "seconds": 20
+          "seconds": 10
         }
       ]
     }
