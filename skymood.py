@@ -61,34 +61,84 @@ def save_json(path, obj):
     os.replace(tmp, path)
 
 
-def claude_busy(cfg):
-    """True while any Claude Code session is mid-turn.
+KIND_ORDER = ["think", "read", "delegate", "run", "write", "wait"]   # later wins when sessions differ
+WRITE_TOOLS = {"Edit", "Write", "MultiEdit", "NotebookEdit"}
+RUN_TOOLS = {"Bash", "PowerShell", "Monitor"}
+DELEGATE_TOOLS = {"Agent", "Task", "Workflow", "SendMessage"}
+READ_TOOLS = {"Read", "Grep", "Glob", "WebSearch", "WebFetch", "LS", "ToolSearch"}
 
-    The UserPromptSubmit hook writes "busy" and the Stop/SessionEnd hooks write
-    "idle" into <busy_dir>/<session_id>. A busy file older than stale_hours is a
-    crashed session; idle files older than a day are pruned here."""
+
+def tool_kind(tool):
+    if tool in WRITE_TOOLS:
+        return "write"
+    if tool in RUN_TOOLS or any(w in tool for w in ("computer", "click", "navigate", "preview_start")):
+        return "run"
+    if tool in DELEGATE_TOOLS or "start_session" in tool:
+        return "delegate"
+    t = tool.lower()
+    if tool in READ_TOOLS or any(w in t for w in ("read", "search", "fetch", "find", "list", "get", "screenshot", "zoom")):
+        return "read"
+    return "think"  # planning tools, wrap-ups, anything else
+
+
+def claude_activity(cfg):
+    """What each busy Claude Code session is doing, e.g. ["write", "read"]; [] when none.
+
+    Hooks write one line into <busy_dir>/<session_id>:
+      think | busy        prompt submitted (UserPromptSubmit)
+      tool <ToolName>     a tool started or finished (Pre/PostToolUse)
+      wait                waiting on a permission prompt (Notification)
+      idle                turn over (Stop / StopFailure / SessionEnd)
+    A non-idle file untouched for stale_hours is a crashed session; idle files
+    older than a day are pruned here."""
     c = cfg.get("claude") or {}
     d = os.path.expanduser(c.get("busy_dir", "~/Library/Application Support/skymood/claude-busy"))
-    now, busy = time.time(), False
+    now, kinds = time.time(), []
     try:
         entries = list(os.scandir(d))
     except OSError:
-        return False
+        return []
     for e in entries:
         try:
             age = now - e.stat().st_mtime
             with open(e.path) as f:
-                state = f.read(8).strip()
+                parts = f.read(120).split()
         except OSError:
             continue
-        if state == "busy" and age < c.get("stale_hours", 2) * 3600:
-            busy = True
-        elif age > 86400:
+        state = parts[0] if parts else "idle"
+        if state != "idle" and age < c.get("stale_hours", 2) * 3600:
+            if state == "tool" and len(parts) > 1:
+                kinds.append(tool_kind(parts[1]))
+            elif state == "wait":
+                kinds.append("wait")
+            else:
+                kinds.append("think")
+        elif state == "idle" and age > 86400:
             try:
                 os.remove(e.path)
             except OSError:
                 pass
-    return busy
+    return kinds
+
+
+def claude_scene(cfg, kinds):
+    """(key, playlist items) for the current activity; kinds=[] means "just finished"."""
+    c = cfg["claude"]
+    sc = c["scenes"]
+    if not kinds:
+        key, anims, secs = ("done", 0), list(sc["done"]), 15
+    else:
+        kind = max(kinds, key=KIND_ORDER.index)
+        level = min(len(kinds), 3)
+        anims = list(sc[kind])
+        if kind != "wait":
+            anims += sc.get(f"busy{level}", []) if level > 1 else []
+        key, secs = (kind, level), {1: 20, 2: 15, 3: 10}[level]
+    items = [{"anim": a, "seconds": secs} for a in dict.fromkeys(anims)]
+    tc = c.get("time_check")
+    if tc:
+        items.append(dict(tc))
+    return key, items
 
 
 def fetch(path):
@@ -283,7 +333,7 @@ class Controller:
         self.state.setdefault("baseline_backlight", cfg["baseline_backlight"])
         self.state.setdefault("alarm1_saved_b64", cfg["alarm1_saved_b64"])
         self.clock = None if dry_run else Clock(cfg, persist)
-        self.claude_on, self.claude_last_busy = False, 0.0
+        self.claude_key, self.claude_items, self.claude_since, self.claude_last_busy = None, None, 0.0, 0.0
 
     def playlist_for(self, mood):
         if mood == "day":
@@ -295,10 +345,10 @@ class Controller:
         """What the clock should show: aurora moods win, then the Claude scene
         (at the current mood's brightness), then the sky mood."""
         mood = self.state.get("mood") or "day"
-        if mood.startswith("aurora") or not self.claude_on:
+        if mood.startswith("aurora") or not self.claude_key:
             pl, bl = self.playlist_for(mood)
         else:
-            pl, bl = self.playlist_for("claude")[0], self.playlist_for(mood)[1]
+            pl, bl = encode_playlist(self.claude_items), self.playlist_for(mood)[1]
         if in_night_hours(self.cfg):
             bl = "night"  # quiet hours: always dim, even for aurora and Claude scenes
         return pl, bl
@@ -315,20 +365,32 @@ class Controller:
             self.state["shown_backlight"] = bl
 
     def update_claude(self):
+        """Pick the Claude scene from what the sessions are doing; hold each scene
+        at least min_dwell_seconds unless Claude needs you, finishes, or stops."""
         c = self.cfg.get("claude") or {}
         if not c.get("enabled"):
             return
         now = time.time()
-        if claude_busy(self.cfg):
+        kinds = claude_activity(self.cfg)
+        if kinds:
             self.claude_last_busy = now
-        on = now - self.claude_last_busy < c.get("linger_seconds", 60)
+            key, items = claude_scene(self.cfg, kinds)
+        elif now - self.claude_last_busy < c.get("linger_seconds", 60):
+            key, items = claude_scene(self.cfg, [])
+        else:
+            key, items = None, None
         if self.state.get("mood") == "night" and not c.get("at_night", True):
-            on = False
-        if on != self.claude_on:
-            self.claude_on = on
-            self.apply("Claude Code working" if on else "Claude Code idle")
-            if not self.dry:
-                save_json(STATE, self.state)
+            key, items = None, None
+        if key == self.claude_key:
+            return
+        urgent = (key is None or self.claude_key is None or key[0] in ("wait", "done")
+                  or self.claude_key[0] == "wait")
+        if not urgent and now - self.claude_since < c.get("min_dwell_seconds", 45):
+            return
+        self.claude_key, self.claude_items, self.claude_since = key, items, now
+        self.apply(f"Claude {key[0]} x{key[1]}" if key else "Claude Code idle")
+        if not self.dry:
+            save_json(STATE, self.state)
 
     def write(self, dp, value, why):
         log(f"{'DRY-RUN ' if self.dry else ''}write DP {dp} ({why})")

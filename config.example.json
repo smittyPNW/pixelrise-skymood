@@ -120,7 +120,50 @@
     "busy_dir": "~/Library/Application Support/skymood/claude-busy",
     "linger_seconds": 60,
     "stale_hours": 2,
-    "at_night": true
+    "at_night": true,
+    "scenes": {
+      "think": [
+        71,
+        52
+      ],
+      "read": [
+        72,
+        88
+      ],
+      "write": [
+        76,
+        89
+      ],
+      "run": [
+        85,
+        75
+      ],
+      "delegate": [
+        87,
+        74
+      ],
+      "wait": [
+        51
+      ],
+      "done": [
+        53
+      ],
+      "busy2": [
+        74
+      ],
+      "busy3": [
+        74,
+        87,
+        89
+      ]
+    },
+    "time_check": {
+      "anim": 11,
+      "seconds": 10,
+      "color": "orange"
+    },
+    "min_dwell_seconds": 45,
+    "_scenes_note": "activity -> built-in animation ids: think=galaxy+ghost, read=comet+rain, write=sparkle lines+particles, run=fire bars+blob map, delegate=triangle+swirl, wait=alarm clock, done=whale; busyN adds more when N sessions work at once (items also get shorter: 20/15/10 s); time_check = the orange clock once per cycle"
   },
   "_setup": "copy to config.local.json; set lat/lon (decimal degrees) and clock_ip; baseline_playlist_b64 is replaced by whatever you set in the app during the day",
   "night_hours": [

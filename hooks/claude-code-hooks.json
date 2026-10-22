@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "d=\"$HOME/Library/Application Support/skymood/claude-busy\"; mkdir -p \"$d\" && sid=$(jq -r \".session_id // empty\" | tr -cd \"A-Za-z0-9_-\") && [ -n \"$sid\" ] && printf busy > \"$d/$sid\"",
+            "command": "d=\"$HOME/Library/Application Support/skymood/claude-busy\"; mkdir -p \"$d\" && sid=$(jq -r \".session_id // empty\" | tr -cd \"A-Za-z0-9_-\") && [ -n \"$sid\" ] && printf think > \"$d/$sid\"",
             "async": true,
             "timeout": 5
           }
@@ -42,6 +42,43 @@
           {
             "type": "command",
             "command": "d=\"$HOME/Library/Application Support/skymood/claude-busy\"; mkdir -p \"$d\" && sid=$(jq -r \".session_id // empty\" | tr -cd \"A-Za-z0-9_-\") && [ -n \"$sid\" ] && printf idle > \"$d/$sid\"",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "d=\"$HOME/Library/Application Support/skymood/claude-busy\"; mkdir -p \"$d\" && j=$(cat) && sid=$(printf %s \"$j\" | jq -r \".session_id // empty\" | tr -cd \"A-Za-z0-9_-\") && [ -n \"$sid\" ] && t=$(printf %s \"$j\" | jq -r \".tool_name // empty\" | tr -cd \"A-Za-z0-9_\") && printf \"tool %s\" \"$t\" > \"$d/$sid\"",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "d=\"$HOME/Library/Application Support/skymood/claude-busy\"; mkdir -p \"$d\" && j=$(cat) && sid=$(printf %s \"$j\" | jq -r \".session_id // empty\" | tr -cd \"A-Za-z0-9_-\") && [ -n \"$sid\" ] && t=$(printf %s \"$j\" | jq -r \".tool_name // empty\" | tr -cd \"A-Za-z0-9_\") && printf \"tool %s\" \"$t\" > \"$d/$sid\"",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "d=\"$HOME/Library/Application Support/skymood/claude-busy\"; mkdir -p \"$d\" && sid=$(jq -r \".session_id // empty\" | tr -cd \"A-Za-z0-9_-\") && [ -n \"$sid\" ] && printf wait > \"$d/$sid\"",
             "async": true,
             "timeout": 5
           }

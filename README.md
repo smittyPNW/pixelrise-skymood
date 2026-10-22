@@ -34,7 +34,7 @@ Watching the device while driving its app showed:
 | night | 8 PM–7 AM (`night_hours`; without it, dusk to dawn), quiet sky | blue clock + rain, dimmed |
 | aurora_watch | dark (sun < −12°) and Kp ≥ 4, or Bz ≤ −10 nT, or OVATION ≥ 5 % within 10° poleward, or tonight's forecast ≥ 6⅓ | orange clock + wave + comet |
 | aurora_storm | dark and Kp ≥ 6⅓, or OVATION ≥ 20 % | red clock + wave + galaxy + particles + swirl |
-| claude | any Claude Code session busy (+60 s linger) | orange clock (40 s) + sparkle burst (10 s), so it reads at a glance (at the current mood's brightness; aurora moods win) |
+| claude | any Claude Code session busy | an activity scene (thinking / reading / writing / running / delegating / waiting / done), busier when more sessions work, orange clock as a 10 s time check; at the current mood's brightness; aurora moods win |
 
 During `night_hours` the backlight is always dim, including for the aurora and Claude scenes.
 
@@ -81,6 +81,41 @@ The sun's altitude is computed locally.
 7. **Claude scene (optional):** merge `hooks/claude-code-hooks.json` into `~/.claude/settings.json`.
    - The async hooks write `busy` / `idle` per session into `~/Library/Application Support/skymood/claude-busy/`.
    - The daemon watches that folder.
+
+### Claude scenes: the clock shows how Claude Code is working
+
+User-level async hooks in `~/.claude/settings.json` (copy in `hooks/claude-code-hooks.json`) write one line per
+session into `~/Library/Application Support/skymood/claude-busy/<session_id>`:
+
+| Hook | Writes |
+|---|---|
+| `UserPromptSubmit` | `think` |
+| `PreToolUse`, `PostToolUse` | `tool <ToolName>` |
+| `Notification` (`permission_prompt`) | `wait` |
+| `Stop`, `StopFailure`, `SessionEnd` | `idle` |
+
+The daemon reads that folder every few seconds and picks a scene from the busiest activity across sessions:
+
+| Activity | Built-in animations |
+|---|---|
+| thinking / planning | galaxy spiral + ghost |
+| reading / searching | comet + rain |
+| writing code (Edit/Write) | sparkle lines + particles |
+| running commands (Bash) | fire bars + blob map |
+| delegating (agents, workflows) | triangle + colour swirl |
+| waiting for your OK | alarm clock |
+| just finished (60 s) | whale |
+
+Every cycle ends with the orange clock for 10 s as a time check.
+
+**How busy:** with 2 sessions working the colour swirl joins in, and with 3 or more the triangle and particles do too.
+Item length drops from 20 s to 15 s to 10 s as more sessions work.
+
+**Pacing:** a scene holds at least 45 s, except when Claude needs you, finishes, or goes idle; those switch at once.
+At night it all stays dim, and aurora moods win.
+
+A session whose file hasn't changed for 2 h counts as crashed.
+Settings: `config.local.json` → `claude` (`scenes`, `time_check`, `min_dwell_seconds`, `linger_seconds`, `stale_hours`, `at_night`).
 
 ## Tools
 
