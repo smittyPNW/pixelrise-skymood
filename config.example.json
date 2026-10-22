@@ -134,5 +134,10 @@
     "stale_hours": 2,
     "at_night": true
   },
-  "_setup": "copy to config.local.json; set lat/lon (decimal degrees) and clock_ip; baseline_playlist_b64 is replaced by whatever you set in the app during the day"
+  "_setup": "copy to config.local.json; set lat/lon (decimal degrees) and clock_ip; baseline_playlist_b64 is replaced by whatever you set in the app during the day",
+  "night_hours": [
+    "20:00",
+    "07:00"
+  ],
+  "_night_note": "night_hours: fixed local-time window for the night mood and forced dim backlight (aurora/Claude scenes stay dim too); remove it to fall back to dusk/dawn (night_sun_alt)"
 }

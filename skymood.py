@@ -159,7 +159,7 @@ def read_sky(cfg, now=None):
     try:
         dark = [now + timedelta(minutes=15 * i) for i in range(4 * 18)]
         dark = [t for t in dark if sun_altitude(lat, lon, t) < cfg["dark_sun_alt"]]
-        fc = [r for r in fetch("products/noaa-planetary-k-index-forecast.json") if r.get("observed") == "predicted"]
+        fc = [r for r in fetch("products/noaa-planetary-k-index-forecast.json") if r.get("observed") in ("predicted", "estimated")]
         tonight = [r["kp"] for r in fc if any(utc(r["time_tag"]) <= t < utc(r["time_tag"]) + timedelta(hours=3) for t in dark)]
         sky["kp_tonight_max"] = max(tonight) if tonight else None
     except Exception as e:
@@ -178,7 +178,7 @@ def read_sky(cfg, now=None):
     return sky
 
 
-def decide(sky, cfg):
+def decide(sky, cfg, now=None):
     t = cfg["thresholds"]
     dark = sky["sun_alt"] < cfg["dark_sun_alt"]
     kp = sky.get("kp_now") or 0
@@ -190,9 +190,41 @@ def decide(sky, cfg):
     if dark and (kp >= t["watch_kp"] or view >= t["watch_view_prob"] or tonight >= t["storm_kp"]
                  or (bz is not None and bz <= t["watch_bz"])):
         return "aurora_watch"
-    if sky["sun_alt"] < cfg["night_sun_alt"]:
-        return "night"
-    return "day"
+    nightly = in_night_hours(cfg, now)
+    if nightly is None:
+        nightly = sky["sun_alt"] < cfg["night_sun_alt"]
+    return "night" if nightly else "day"
+
+
+def _minutes(hhmm):
+    h, m = hhmm.split(":")
+    return int(h) * 60 + int(m)
+
+
+def in_night_hours(cfg, now=None):
+    """True inside cfg["night_hours"] = ["20:00", "07:00"] (local time, may wrap midnight);
+    None when no schedule is configured (then dusk/dawn decides)."""
+    nh = cfg.get("night_hours")
+    if not nh:
+        return None
+    now = now or datetime.now()
+    m, start, end = now.hour * 60 + now.minute, _minutes(nh[0]), _minutes(nh[1])
+    return start <= m < end if start < end else (m >= start or m < end)
+
+
+def seconds_to_night_boundary(cfg, now=None):
+    nh = cfg.get("night_hours")
+    if not nh:
+        return None
+    now = now or datetime.now()
+    waits = []
+    for hhmm in nh:
+        h, m = map(int, hhmm.split(":"))
+        b = now.replace(hour=h, minute=m, second=2, microsecond=0)
+        if b <= now:
+            b += timedelta(days=1)
+        waits.append((b - now).total_seconds())
+    return min(waits)
 
 
 # ----------------------------------------------------------------- clock
@@ -264,8 +296,12 @@ class Controller:
         (at the current mood's brightness), then the sky mood."""
         mood = self.state.get("mood") or "day"
         if mood.startswith("aurora") or not self.claude_on:
-            return self.playlist_for(mood)
-        return self.playlist_for("claude")[0], self.playlist_for(mood)[1]
+            pl, bl = self.playlist_for(mood)
+        else:
+            pl, bl = self.playlist_for("claude")[0], self.playlist_for(mood)[1]
+        if in_night_hours(self.cfg):
+            bl = "night"  # quiet hours: always dim, even for aurora and Claude scenes
+        return pl, bl
 
     def apply(self, why):
         if self.state.get("paused_until", 0) > time.time():
@@ -311,7 +347,7 @@ class Controller:
             log(f"sky {json.dumps(sky)} -> {mood} (paused: manual change in the app)")
             return sky, mood
         # escalate at once; step down only after the calmer mood has held a while
-        if cur and mood != cur and rank.index(mood) < rank.index(cur):
+        if cur in ("aurora_watch", "aurora_storm") and mood != cur and rank.index(mood) < rank.index(cur):
             since = self.state.setdefault("calmer_since", now)
             if now - since < self.cfg["step_down_minutes"] * 60:
                 log(f"sky {json.dumps(sky)} -> {mood} (holding {cur} for step-down delay)")
@@ -363,10 +399,11 @@ class Controller:
         next_eval, next_hb = 0, 0
         while True:
             try:
+                self.update_claude()  # first, so a restart mid-turn doesn't flash the mood playlist
                 if time.time() >= next_eval:
                     self.evaluate()
-                    next_eval = time.time() + interval
-                self.update_claude()
+                    to_boundary = seconds_to_night_boundary(self.cfg)
+                    next_eval = time.time() + min(interval, to_boundary or interval)
                 if self.dry:
                     time.sleep(5)
                     continue

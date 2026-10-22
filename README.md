@@ -31,10 +31,12 @@ Watching the device while driving its app showed:
 | Mood | When (defaults, all in `config.local.json`) | Clock |
 |---|---|---|
 | day | sun above −6° | your own playlist (anything you set in the app during the day becomes the day playlist) |
-| night | sun below −6°, quiet sky | blue clock + rain, dimmed |
+| night | 8 PM–7 AM (`night_hours`; without it, dusk to dawn), quiet sky | blue clock + rain, dimmed |
 | aurora_watch | dark (sun < −12°) and Kp ≥ 4, or Bz ≤ −10 nT, or OVATION ≥ 5 % within 10° poleward, or tonight's forecast ≥ 6⅓ | orange clock + wave + comet |
 | aurora_storm | dark and Kp ≥ 6⅓, or OVATION ≥ 20 % | red clock + wave + galaxy + particles + swirl |
 | claude | any Claude Code session busy (+60 s linger) | orange clock + sparkle lines, particles, galaxy, swirl (at the current mood's brightness; aurora moods win) |
+
+During `night_hours` the backlight is always dim, including for the aurora and Claude scenes.
 
 **Behaviour:**
 - Moods escalate immediately and step down only after 30 minutes.
