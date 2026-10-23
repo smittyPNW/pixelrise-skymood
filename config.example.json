@@ -241,5 +241,60 @@
     "07:00"
   ],
   "_night_note": "night_hours: fixed local-time window for the night mood and forced dim backlight (aurora/Claude scenes stay dim too); remove it to fall back to dusk/dawn (night_sun_alt)",
-  "_aurora_note": "aurora scenes (tinted, since the colour byte tints animations): blob map green (curtain band), rain green/purple (rays), galaxy green (spiral aurora), wave green, glowing ring purple (oval), sine waves green; \"color\": \"kp\" tints the clock by live Kp: green < 5, yellow 5 (G1), orange 6 (G2), red 7 (G3), purple 8+ (G4-5)"
+  "_aurora_note": "aurora scenes (tinted, since the colour byte tints animations): blob map green (curtain band), rain green/purple (rays), galaxy green (spiral aurora), wave green, glowing ring purple (oval), sine waves green; \"color\": \"kp\" tints the clock by live Kp: green < 5, yellow 5 (G1), orange 6 (G2), red 7 (G3), purple 8+ (G4-5)",
+  "seasons": [
+    {
+      "name": "halloween",
+      "from": "10-01",
+      "to": "10-31",
+      "playlist": [
+        {
+          "anim": 11,
+          "seconds": 15,
+          "color": "orange"
+        },
+        {
+          "anim": 52,
+          "seconds": 12,
+          "color": "white"
+        },
+        {
+          "anim": 12,
+          "seconds": 15,
+          "color": "purple"
+        },
+        {
+          "anim": 78,
+          "seconds": 12,
+          "color": "orange"
+        },
+        {
+          "anim": 11,
+          "seconds": 15,
+          "color": "orange"
+        },
+        {
+          "anim": 54,
+          "seconds": 12,
+          "color": "orange"
+        },
+        {
+          "anim": 12,
+          "seconds": 15,
+          "color": "purple"
+        },
+        {
+          "anim": 90,
+          "seconds": 10,
+          "color": "orange"
+        },
+        {
+          "anim": 13,
+          "seconds": 8,
+          "color": "orange"
+        }
+      ]
+    }
+  ],
+  "_seasons_note": "seasonal daytime packs replace the day playlist between from..to (MM-DD); the clock shows every other slot; halloween = orange clock, white ghost, purple clock, orange flames (jack-o'-lantern), orange skyline, orange ring (harvest moon), date"
 }

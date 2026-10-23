@@ -36,6 +36,10 @@ Watching the device while driving its app showed:
 | aurora_storm | dark and Kp ≥ 6⅓, or OVATION ≥ 25 % within 6° poleward | Kp-coloured clock twice + blob map, glowing ring, rain, wave, sine waves, fireworks, faster |
 | claude | any Claude Code session busy | an activity scene (thinking / reading / writing / running / delegating / waiting / done), busier when more sessions work, orange clock as a 10 s time check; at the current mood's brightness; aurora moods win |
 
+**Seasonal daytime packs:** `seasons` in the config replaces the day playlist between two dates. Halloween (Oct 1–31) alternates an
+orange or purple clock with a white ghost, orange flames (jack-o'-lantern glow), an orange spooky skyline, a harvest-moon ring
+and the date, so the time is up every other slot.
+
 **Kp colour:** the clock shows the live Kp as a colour, following NOAA's G-scale:
 green below 5, yellow 5 (G1), orange 6 (G2), red 7 (G3), purple 8+ (G4–5).
 Kp is the higher of the 1-minute estimate and the official 3-hour value for the current block.

@@ -289,6 +289,16 @@ def seconds_to_night_boundary(cfg, now=None):
 
 
 # ----------------------------------------------------------------- clock
+def active_season(cfg, today=None):
+    """The seasonal daytime pack whose "from".."to" (MM-DD, may wrap the new year) covers today."""
+    md = (today or datetime.now()).strftime("%m-%d")
+    for s in cfg.get("seasons", []):
+        a, b = s["from"], s["to"]
+        if (a <= md <= b) if a <= b else (md >= a or md <= b):
+            return s
+    return None
+
+
 def kp_color(kp):
     """Clock colour for the live Kp, following NOAA's G-scale: G1 starts at Kp 5."""
     for limit, name in ((5, "green"), (6, "yellow"), (7, "orange"), (8, "red")):
@@ -356,6 +366,9 @@ class Controller:
 
     def playlist_for(self, mood):
         if mood == "day":
+            season = active_season(self.cfg)
+            if season:
+                return encode_playlist(season["playlist"]), self.state["baseline_backlight"]
             return self.state["baseline_playlist_b64"], self.state["baseline_backlight"]
         m = self.cfg["moods"][mood]
         kp_col = kp_color(self.state.get("kp", 0))  # "color": "kp" = clock tinted by the live Kp
